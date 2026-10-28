@@ -1,7 +1,19 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.0 → 1.0.1 (PATCH)
+Version change: 1.0.1 → 1.1.0 (MINOR: adds a MUST NOT rule on ESPN login cookies)
+  - Secrets & Data: ESPN cookies removed from the secrets list. New rule: the app MUST NOT use
+    ESPN login cookies; the league is viewable to the public. Seasons ESPN keeps private
+    (before 2026) come from a one-time snapshot in the app (src/belt/data/past_seasons.json).
+  - II. ESPN Is Read-Only and Unofficial: unchanged (it never implied cookies).
+Templates requiring updates:
+  - ✅ .specify/templates/plan-template.md, spec-template.md, tasks-template.md (no cookie
+    references; no change)
+  - ✅ .claude/skills/speckit-*/SKILL.md (no change)
+  - ✅ CLAUDE.md, README.md, .env.example (updated with the app change)
+Follow-up TODOs: none
+
+Previous change: 1.0.0 → 1.0.1 (PATCH)
   - III. One Small App: "existing ECS cluster" → "Fargate Spot, sharing the existing load
     balancer" (the app gets its own free ECS cluster; no new ALB)
 Previous change: (unfilled template) → 1.0.0
@@ -84,8 +96,12 @@ Rationale: lets new ideas get added, or dropped, without reworking the rest of t
 
 ## Secrets & Data
 
-- ESPN cookies (`espn_s2`, `SWID`), database credentials, and other secrets live in environment
-  variables (`.env` locally, task configuration on ECS). They MUST NOT be committed or logged.
+- Database credentials and other secrets live in environment variables (`.env` locally, task
+  configuration on ECS). They MUST NOT be committed or logged.
+- The app MUST NOT use ESPN login cookies (`espn_s2`). They are a full login to the LM's ESPN
+  account, so a leak could wreck the league. The league is viewable to the public instead.
+  Seasons ESPN keeps private (2022–2025, whose settings are locked) are read from a one-time
+  snapshot in the app, `src/belt/data/past_seasons.json`.
 - Store only what a feature needs: email, display name, ESPN member link, and feature data.
 - No money handling. Payments and payouts stay in the league's betting app.
 
@@ -109,4 +125,4 @@ MUST stay consistent with it.
   section, PATCH for wording fixes.
 - **Compliance**: checked in each plan's Constitution Check and by `/speckit-analyze`.
 
-**Version**: 1.0.1 | **Ratified**: 2026-10-27 | **Last Amended**: 2026-10-27
+**Version**: 1.1.0 | **Ratified**: 2026-10-27 | **Last Amended**: 2026-10-27

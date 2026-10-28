@@ -1,5 +1,8 @@
 """Read league data from ESPN's unofficial fantasy API (read-only), with an in-memory cache.
 
+The league is viewable to the public from 2026 on, so ESPN needs no login. Seasons before that
+stay private, so they're loaded from data/past_seasons.json, saved once with the LM's cookies.
+
 Completed seasons never change, so each is fetched once per process. The current season is
 re-fetched when its copy is more than 15 minutes old. If ESPN fails, callers get whatever is
 cached plus an error flag.
@@ -7,11 +10,13 @@ cached plus an error flag.
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 from espn_api.football import League
@@ -90,6 +95,46 @@ BENCH, IR = 20, 21
 _cache: dict[int, Season] = {}
 _lineup_cache: dict[int, Lineups] = {}
 
+PAST_SEASONS = Path(__file__).parent / "data" / "past_seasons.json"
+
+
+def load_past_seasons(path: Path = PAST_SEASONS) -> tuple[list[Season], list[Lineups]]:
+    """The private 2022-2025 seasons and their weekly lineups, saved once (they never change)."""
+    data = json.loads(path.read_text())
+    seasons = [
+        Season(
+            year=s["year"],
+            managers=[ManagerSeason(**m) for m in s["managers"]],
+            in_progress=s["in_progress"],
+            previous_seasons=s["previous_seasons"],
+            fetched_at=datetime.fromisoformat(s["fetched_at"]),
+            last_completed_week=s["last_completed_week"],
+        )
+        for s in data["seasons"]
+    ]
+    lineups = [
+        Lineups(
+            year=lu["year"],
+            slot_counts={int(slot): n for slot, n in lu["slot_counts"].items()},
+            team_weeks=[
+                TeamWeek(tw["week"], tw["team_id"], [
+                    Player(p["name"], p["slot"], p["points"], frozenset(p["eligible"]))
+                    for p in tw["players"]
+                ])
+                for tw in lu["team_weeks"]
+            ],
+            matchups=[Matchup(**m) for m in lu["matchups"]],
+            fetched_at=datetime.fromisoformat(lu["fetched_at"]),
+        )
+        for lu in data["lineups"]
+    ]
+    return seasons, lineups
+
+
+_past_seasons, _past_lineups = load_past_seasons()
+_cache.update({s.year: s for s in _past_seasons})
+_lineup_cache.update({lu.year: lu for lu in _past_lineups})
+
 
 def current_season_year(today: date) -> int:
     """NFL seasons run September to early January; between seasons, the last one is current."""
@@ -125,8 +170,6 @@ def _league_get(year: int, params: dict[str, Any]) -> dict[str, Any]:
     league = League(
         league_id=int(os.environ["ESPN_LEAGUE_ID"]),
         year=year,
-        espn_s2=os.environ["ESPN_S2"],
-        swid=os.environ["ESPN_SWID"],
         fetch_league=False,
     )
     return league.espn_request.league_get(params=params)

@@ -9,8 +9,7 @@ ESPN app. Live at https://fantasy.taylorbasso.dev.
 
 ## Run locally
 
-Needs Python 3.11 (via `uv`) and a `.env` with the league ID and ESPN cookies
-(see `.env.example`).
+Needs Python 3.11 (via `uv`) and a `.env` with the league ID (see `.env.example`).
 
 ```bash
 uv venv --python 3.11 .venv && uv pip install --python .venv -e '.[dev]'

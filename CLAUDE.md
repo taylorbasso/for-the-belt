@@ -60,9 +60,11 @@ ones:
   [`espn-api`](https://github.com/cwendt94/espn-api) Python library. They can change without
   notice.
 - Treat ESPN as read-only. Never try to write to ESPN.
-- Private league access uses the LM's `espn_s2` and `SWID` cookies from `.env`
-  (see `.env.example`), and from SSM SecureString parameters when deployed. They work as a login
-  to the LM's ESPN account: never log or commit them.
+- The league is viewable to the public, so the app sends no ESPN login. Don't add ESPN
+  cookies (`espn_s2`) back: they'd be a full login to the LM's ESPN account.
+- ESPN keeps seasons before 2026 private (past seasons' settings are locked), so 2022–2025
+  come from `src/belt/data/past_seasons.json`, saved once while the LM's cookies still worked.
+  Those seasons never change; don't regenerate the file.
 - League history in ESPN goes back to 2022 under the current league ID.
 
 ## Commands

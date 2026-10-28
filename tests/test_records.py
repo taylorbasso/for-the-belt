@@ -109,3 +109,14 @@ def test_season_picker_defaults_to_current_season(monkeypatch):
     assert "9-5-0" in page("?season=2025")
     assert "12-9-0" in page("?season=all")
     assert "3-4-0" in page("?season=1999")  # unknown year falls back to current
+
+
+def test_past_seasons_snapshot_loads():
+    from belt.espn import load_past_seasons
+
+    seasons, lineups = load_past_seasons()
+    assert [s.year for s in seasons] == [2022, 2023, 2024, 2025]
+    assert [len(s.managers) for s in seasons] == [6, 8, 8, 8]
+    assert not any(s.in_progress for s in seasons)
+    assert [len(lu.team_weeks) for lu in lineups] == [108, 144, 144, 144]
+    assert isinstance(lineups[0].team_weeks[0].players[0].eligible, frozenset)
