@@ -64,3 +64,26 @@ ones:
   (see `.env.example`), and from SSM SecureString parameters when deployed. They work as a login
   to the LM's ESPN account: never log or commit them.
 - League history in ESPN goes back to 2022 under the current league ID.
+
+## Commands
+
+```bash
+./scripts/dev-server.sh {start|stop|restart|status}   # local server on 127.0.0.1:5002, loads .env
+./scripts/check.sh                                     # pytest
+uv run deploy/deploy.py                                # build, push, roll out (needs AWS creds + podman)
+```
+
+- First-time setup: `uv venv --python 3.11 .venv && uv pip install --python .venv -e '.[dev]'`.
+- Restart the dev server after Python changes; templates reload on their own.
+- AWS uses `aws login`. boto3 (so `deploy.py`) reads it directly, but the pinned Terraform AWS
+  provider can't: run `eval "$(aws configure export-credentials --format env)"` before
+  `terragrunt` in the same shell.
+- Port 5001 belongs to the biweekly-budget dev server; don't stop it.
+
+## Where things are
+
+- `src/belt/espn.py`: ESPN reads and the in-memory season cache, shared by all tabs.
+- `src/belt/records.py`: the Records tab (aggregation + blueprint). It keeps no database;
+  Postgres arrives with the bet tracker.
+- `specs/NNN-*/`: each feature's spec, plan, and tasks.
+- Infrastructure: `~/code/basso-infra/basso-root/us-west-2/for-the-belt/`.

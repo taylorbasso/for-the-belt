@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Records{% endblock %}
+{% block content %}
+{% if espn_error %}
+  {% if rows %}
+    <p class="notice">Couldn't reach ESPN. Showing records as of {{ updated.strftime('%b %-d, %-I:%M %p') }}.</p>
+  {% else %}
+    <p class="notice">Couldn't reach ESPN. Try again later.</p>
+  {% endif %}
+{% endif %}
+
+{% if rows %}
+<table class="records">
+  <thead>
+    <tr>
+      <th class="name">Manager</th>
+      <th>Yrs</th>
+      <th>W-L-T</th>
+      <th>Win%</th>
+      <th>PF</th>
+      <th>PA</th>
+      <th>Titles</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="name">{{ r.name }}</td>
+      <td>{{ r.seasons }}</td>
+      <td>{{ r.wins }}-{{ r.losses }}-{{ r.ties }}</td>
+      <td>{{ ('%.3f' % r.win_pct).lstrip('0') }}</td>
+      <td>{{ '%.0f' % r.points_for }}</td>
+      <td>{{ '%.0f' % r.points_against }}</td>
+      <td>{{ '🏆' * r.titles if r.titles else '–' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="footnote">
+  Regular season only.
+  {% if current.in_progress %}{{ current.year }} season in progress.{% endif %}
+  Updated {{ updated.strftime('%b %-d, %-I:%M %p') }}.
+</p>
+{% endif %}
+{% endblock %}

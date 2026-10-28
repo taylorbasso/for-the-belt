@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "for-the-belt"
+version = "0.1.0"
+description = "Companion app for an ESPN fantasy football league"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.0",
+    "gunicorn>=22.0",
+    "espn-api",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+belt = ["templates/*", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
