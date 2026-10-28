@@ -22,9 +22,11 @@ Renders the Historical Records tab inside the shared layout. The layout has a ta
 | Win% | three decimals, e.g. `.619` |
 | PF / PA | whole numbers, e.g. `6946` |
 | Titles | integer; a 🏆 for each title is fine |
+| 🍺 | shotguns (FR-012), integer |
 
 **Footnotes under the table**:
-- "Regular season only."
+- "Records are regular season only. 🍺 = shotguns: weeks with the league's lowest score,
+  playoffs included."
 - If the current season is in progress: "<year> season in progress."
 - "Updated <time>": when the current season was last fetched.
 

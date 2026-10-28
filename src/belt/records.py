@@ -26,6 +26,7 @@ class AllTimeRecord:
     points_for: float = 0.0
     points_against: float = 0.0
     titles: int = 0
+    shotguns: int = 0
 
     @property
     def win_pct(self) -> float:
@@ -48,6 +49,7 @@ def all_time_records(seasons: list[Season]) -> list[AllTimeRecord]:
             row.points_against += m.points_against
             if m.final_rank == 1:
                 row.titles += 1
+            row.shotguns += m.shotguns
     return sorted(rows.values(), key=lambda r: (r.win_pct, r.points_for), reverse=True)
 
 

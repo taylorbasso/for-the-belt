@@ -1,11 +1,11 @@
 from datetime import datetime, timezone
 
-from belt.espn import ManagerSeason, Season
+from belt.espn import ManagerSeason, Season, shotguns_by_team
 from belt.records import all_time_records
 
 
-def manager(year, member_id, name, w, l, t=0, pf=100.0, pa=100.0, rank=0):
-    return ManagerSeason(year, member_id, name, w, l, t, pf, pa, rank)
+def manager(year, member_id, name, w, l, t=0, pf=100.0, pa=100.0, rank=0, shotguns=0):
+    return ManagerSeason(year, member_id, name, w, l, t, pf, pa, rank, shotguns)
 
 
 def season(year, *managers):
@@ -56,3 +56,35 @@ def test_manager_with_fewer_seasons():
     ]))
     assert rows["a"].seasons == 2
     assert rows["b"].seasons == 1
+
+
+def test_shotguns_sum_across_seasons():
+    [row] = all_time_records([
+        season(2023, manager(2023, "a", "A", 7, 7, shotguns=3)),
+        season(2024, manager(2024, "a", "A", 7, 7, shotguns=2)),
+    ])
+    assert row.shotguns == 5
+
+
+def side(team_id, weeks):
+    return {"teamId": team_id, "pointsByScoringPeriod": {str(w): p for w, p in weeks.items()}}
+
+
+def test_shotguns_count_lowest_score_per_completed_week():
+    schedule = [
+        {"home": side(1, {1: 80.0}), "away": side(2, {1: 100.0})},
+        {"home": side(3, {1: 90.0}), "away": side(4, {1: 95.0})},
+        # A two-week playoff matchup is scored week by week.
+        {"home": side(1, {2: 120.0, 3: 60.0}), "away": side(2, {2: 70.0, 3: 110.0})},
+        {"home": side(3, {2: 70.0, 3: 100.0}), "away": side(4, {2: 90.0, 3: 105.0})},
+        # Week 4 hasn't finished yet.
+        {"home": side(1, {4: 0.0}), "away": side(2, {4: 0.0})},
+    ]
+    counts = shotguns_by_team(schedule, latest_scoring_period=4)
+    # Week 1: team 1. Week 2: teams 2 and 3 tie. Week 3: team 1.
+    assert counts == {1: 2, 2: 1, 3: 1}
+
+
+def test_shotguns_include_teams_without_an_opponent():
+    schedule = [{"home": side(1, {1: 50.0})}, {"home": side(2, {1: 90.0}), "away": side(3, {1: 80.0})}]
+    assert shotguns_by_team(schedule, latest_scoring_period=2) == {1: 1}

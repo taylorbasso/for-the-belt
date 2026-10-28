@@ -31,6 +31,7 @@ class ManagerSeason:
     points_for: float
     points_against: float
     final_rank: int  # 0 while the season is in progress
+    shotguns: int  # completed weeks with the league's lowest score, playoffs included
 
 
 @dataclass(frozen=True)
@@ -50,6 +51,31 @@ def current_season_year(today: date) -> int:
     return today.year if today.month >= 9 else today.year - 1
 
 
+def shotguns_by_team(schedule: list[dict[str, Any]], latest_scoring_period: int) -> dict[int, int]:
+    """Count, per team id, the completed NFL weeks where it had the lowest score.
+
+    Uses per-week points, since playoff matchups span two weeks. Weeks before ESPN's
+    latestScoringPeriod are complete. Everyone tied for lowest gets one.
+    """
+    weekly: dict[int, dict[int, float]] = {}
+    for matchup in schedule:
+        for side in ("home", "away"):
+            team = matchup.get(side)
+            if not team:
+                continue
+            for week, points in team.get("pointsByScoringPeriod", {}).items():
+                if int(week) < latest_scoring_period:
+                    weekly.setdefault(int(week), {})[team["teamId"]] = points
+
+    counts: dict[int, int] = {}
+    for scores in weekly.values():
+        low = min(scores.values())
+        for team_id, points in scores.items():
+            if points == low:
+                counts[team_id] = counts.get(team_id, 0) + 1
+    return counts
+
+
 def fetch_season(year: int) -> Season:
     league = League(
         league_id=int(os.environ["ESPN_LEAGUE_ID"]),
@@ -58,8 +84,12 @@ def fetch_season(year: int) -> Season:
         swid=os.environ["ESPN_SWID"],
         fetch_league=False,
     )
-    data: dict[str, Any] = league.espn_request.league_get(params={"view": "mTeam"})
+    data: dict[str, Any] = league.espn_request.league_get(
+        params={"view": ["mTeam", "mMatchupScore"]}
+    )
+    status = data["status"]
     members = {m["id"]: m for m in data.get("members", [])}
+    shotguns = shotguns_by_team(data.get("schedule", []), status["latestScoringPeriod"])
 
     managers = []
     for team in data["teams"]:
@@ -81,10 +111,10 @@ def fetch_season(year: int) -> Season:
                 points_for=record["pointsFor"],
                 points_against=record["pointsAgainst"],
                 final_rank=team.get("rankCalculatedFinal") or 0,
+                shotguns=shotguns.get(team["id"], 0),
             )
         )
 
-    status = data["status"]
     return Season(
         year=year,
         managers=managers,

@@ -8,7 +8,14 @@
 </head>
 <body>
   <header>
-    <h1>For the Belt</h1>
+    <h1 class="logo" aria-label="For the Belt"><span aria-hidden="true">                  _______________________
+  _______________/                       \_______________
+ |  __________   |     F O R   T H E     |   __________  |
+ | |  (::::)  |  |     B   E   L   T     |  |  (::::)  | |
+ | |   F  F   |  |   -----------------   |  |   F  F   | |
+ | |__________|  |   FANTASY  FOOTBALL   |  |__________| |
+ |_______________|     *  CHAMPION  *    |_______________|
+                 \_______________________/</span></h1>
     <nav class="tabs">
       <a href="{{ url_for('records.index') }}" class="{{ 'active' if request.endpoint == 'records.index' }}">Records</a>
     </nav>

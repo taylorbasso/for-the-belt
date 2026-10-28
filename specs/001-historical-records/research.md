@@ -19,6 +19,15 @@ All findings were checked against the real league on 2026-10-27.
   That's far slower and needs nothing extra for this tab. Calling ESPN's raw HTTP endpoint without
   the library would mean re-implementing cookie and endpoint handling the library already does.
 
+### 1a. Shotguns (added 2026-10-27)
+
+- **Decision**: Add `mMatchupScore` to the same request (`view=["mTeam", "mMatchupScore"]`). Count
+  the lowest score per NFL week from `pointsByScoringPeriod`, for weeks before
+  `latestScoringPeriod`.
+- **Rationale**: Still one request per season (about 0.17s). All 8 teams play every playoff week
+  (winners and consolation brackets), so every week has a full set of scores. A cross-check on
+  2026-10-27 found 79 shotguns, exactly one per completed week (4 × 18 + 7).
+
 ## 2. Storage: in-memory cache, no Postgres for this feature
 
 - **Decision**: Keep fetched seasons in a module-level dict inside the app process.

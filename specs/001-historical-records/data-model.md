@@ -16,6 +16,7 @@ ESPN's `mTeam` view.
 | `wins` / `losses` / `ties` | int | `team.record.overall` |
 | `points_for` / `points_against` | float | `team.record.overall` |
 | `final_rank` | int | `team.rankCalculatedFinal` (0 while the season is in progress) |
+| `shotguns` | int | completed weeks with the season's lowest score (see below) |
 
 ## Season
 
@@ -42,8 +43,15 @@ Computed per manager by a pure function over all cached seasons. This is one row
 | `win_pct` | float | `(wins + ties/2) / games`, or 0 if no games (FR-005) |
 | `points_for` / `points_against` | float | sums |
 | `titles` | int | count of seasons with `final_rank == 1` (FR-006) |
+| `shotguns` | int | sum of the manager's season shotguns (FR-012) |
 
 **Ordering (FR-007)**: by `win_pct` descending, then `points_for` descending.
+
+## Shotguns
+
+Computed per season from the `mMatchupScore` view's `schedule[].home/away.pointsByScoringPeriod`
+(per NFL week, since playoff matchups span two weeks). A week counts once it's before
+`status.latestScoringPeriod`. In each week, every team tied for the lowest score gets one.
 
 ## Cache rules
 

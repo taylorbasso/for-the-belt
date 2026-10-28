@@ -20,6 +20,7 @@
       <th>PF</th>
       <th>PA</th>
       <th>Titles</th>
+      <th title="Shotguns: weeks with the league's lowest score">🍺</th>
     </tr>
   </thead>
   <tbody>
@@ -32,13 +33,15 @@
       <td>{{ '%.0f' % r.points_for }}</td>
       <td>{{ '%.0f' % r.points_against }}</td>
       <td>{{ '🏆' * r.titles if r.titles else '–' }}</td>
+      <td>{{ r.shotguns }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
 <p class="footnote">
-  Regular season only.
+  Records are regular season only. 🍺 = shotguns: weeks with the league's lowest score,
+  playoffs included.
   {% if current.in_progress %}{{ current.year }} season in progress.{% endif %}
   Updated {{ updated.strftime('%b %-d, %-I:%M %p') }}.
 </p>

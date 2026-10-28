@@ -68,6 +68,9 @@ standings for every season, added up by hand.
 - **FR-010**: If ESPN can't be reached, the tab MUST show the last loaded records with their
   "as of" date instead of an error.
 - **FR-011**: The tab MUST be viewable by anyone with the link, without logging in.
+- **FR-012**: The tab MUST show each manager's total shotguns: the number of completed NFL weeks,
+  across every season and including playoff weeks, where they had the league's lowest score.
+  Everyone tied for lowest gets one. (Added 2026-10-27.)
 
 ### Key Entities
 
@@ -92,7 +95,9 @@ standings for every season, added up by hand.
 
 - "Every ESPN season" means every season ESPN has under the league's current league ID (2022
   onward). If the league existed earlier under a different ID, those seasons are out of scope.
-- Only the regular season counts toward W-L-T and points. Playoff records, head-to-head records,
+- Only the regular season counts toward W-L-T and points. Shotguns (FR-012) are the exception:
+  they count every completed week, playoffs included, back to 2022, even before the shotgun
+  rule existed. Playoff records, head-to-head records,
   and per-season breakdowns are out of scope.
 - Manager names come from their ESPN profile names.
 - Records only need to be as fresh as the most recently completed week.
