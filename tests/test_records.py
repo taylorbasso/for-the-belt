@@ -7,8 +7,8 @@ from belt.records import all_time_records
 
 
 def manager(year, member_id, name, w, l, t=0, pf=100.0, pa=100.0, rank=0, shotguns=0,
-            pickups=0, drops=0, trades=0, lineup_moves=0, ir_moves=0):
-    return ManagerSeason(year, member_id, name, w, l, t, pf, pa, rank, shotguns,
+            pickups=0, drops=0, trades=0, lineup_moves=0, ir_moves=0, team_id=0):
+    return ManagerSeason(year, team_id, member_id, name, w, l, t, pf, pa, rank, shotguns,
                          pickups, drops, trades, lineup_moves, ir_moves)
 
 

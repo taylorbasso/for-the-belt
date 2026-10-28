@@ -118,6 +118,50 @@ table.records .name {
   white-space: normal;
 }
 
+.page-title {
+  margin: 4px 0 4px;
+  font-size: 1.15rem;
+}
+
+.intro {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.callout {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-left: 4px solid var(--gold);
+  border-radius: 6px;
+  background: var(--stripe);
+}
+
+.callout-label {
+  color: var(--gold);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.callout p {
+  margin: 4px 0 0;
+}
+
+table.records td.big {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+/* Second line under a manager's name, e.g. the Bench tab's worst week. */
+table.records .sub {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: normal;
+}
+
 table.records th {
   color: var(--muted);
   font-weight: 600;

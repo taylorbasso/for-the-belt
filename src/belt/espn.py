@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 import os
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from typing import Any
@@ -23,6 +24,7 @@ CURRENT_SEASON_MAX_AGE = timedelta(minutes=15)
 @dataclass(frozen=True)
 class ManagerSeason:
     year: int
+    team_id: int
     member_id: str
     name: str
     wins: int
@@ -46,9 +48,47 @@ class Season:
     in_progress: bool
     previous_seasons: list[int]
     fetched_at: datetime
+    last_completed_week: int = 0
 
+
+@dataclass(frozen=True)
+class Player:
+    name: str
+    slot: int  # ESPN lineup slot the manager put them in: 20 = bench, 21 = IR
+    points: float
+    eligible: frozenset[int]  # lineup slots their position allows
+
+
+@dataclass(frozen=True)
+class TeamWeek:
+    week: int
+    team_id: int
+    players: list[Player]
+
+
+@dataclass(frozen=True)
+class Matchup:
+    weeks: list[int]  # two weeks for playoff matchups
+    winner_id: int
+    loser_id: int
+    winner_points: float
+
+
+@dataclass(frozen=True)
+class Lineups:
+    """Every completed week's rosters for one season."""
+
+    year: int
+    slot_counts: dict[int, int]  # starting slots only
+    team_weeks: list[TeamWeek]
+    matchups: list[Matchup]
+    fetched_at: datetime
+
+
+BENCH, IR = 20, 21
 
 _cache: dict[int, Season] = {}
+_lineup_cache: dict[int, Lineups] = {}
 
 
 def current_season_year(today: date) -> int:
@@ -81,7 +121,7 @@ def shotguns_by_team(schedule: list[dict[str, Any]], latest_scoring_period: int)
     return counts
 
 
-def fetch_season(year: int) -> Season:
+def _league_get(year: int, params: dict[str, Any]) -> dict[str, Any]:
     league = League(
         league_id=int(os.environ["ESPN_LEAGUE_ID"]),
         year=year,
@@ -89,9 +129,11 @@ def fetch_season(year: int) -> Season:
         swid=os.environ["ESPN_SWID"],
         fetch_league=False,
     )
-    data: dict[str, Any] = league.espn_request.league_get(
-        params={"view": ["mTeam", "mMatchupScore"]}
-    )
+    return league.espn_request.league_get(params=params)
+
+
+def fetch_season(year: int) -> Season:
+    data = _league_get(year, {"view": ["mTeam", "mMatchupScore"]})
     status = data["status"]
     members = {m["id"]: m for m in data.get("members", [])}
     shotguns = shotguns_by_team(data.get("schedule", []), status["latestScoringPeriod"])
@@ -109,6 +151,7 @@ def fetch_season(year: int) -> Season:
         managers.append(
             ManagerSeason(
                 year=year,
+                team_id=team["id"],
                 member_id=member_id,
                 name=name or member_id,
                 wins=record["wins"],
@@ -132,7 +175,77 @@ def fetch_season(year: int) -> Season:
         in_progress=status["latestScoringPeriod"] <= status["finalScoringPeriod"],
         previous_seasons=list(status.get("previousSeasons", [])),
         fetched_at=datetime.now(timezone.utc),
+        last_completed_week=min(status["latestScoringPeriod"] - 1, status["finalScoringPeriod"]),
     )
+
+
+def fetch_lineups(season: Season) -> Lineups:
+    """One request per completed week, 8 at a time (about 1s for a full season)."""
+    weeks = list(range(1, season.last_completed_week + 1))
+
+    def get_week(week: int) -> dict[str, Any]:
+        views = ["mMatchup"] + (["mSettings"] if week == 1 else [])  # mMatchupScore adds ~1 MB
+        return _league_get(season.year, {"view": views, "scoringPeriodId": week})
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        responses = list(pool.map(get_week, weeks))
+
+    slot_counts: dict[int, int] = {}
+    if responses:
+        counts = responses[0]["settings"]["rosterSettings"]["lineupSlotCounts"]
+        slot_counts = {int(s): n for s, n in counts.items() if n and int(s) not in (BENCH, IR)}
+
+    team_weeks = []
+    for week, data in zip(weeks, responses):
+        for matchup in data.get("schedule", []):
+            for side in ("home", "away"):
+                team = matchup.get(side)
+                if not team or "rosterForCurrentScoringPeriod" not in team:
+                    continue
+                if str(week) not in team.get("pointsByScoringPeriod", {}):
+                    continue
+                players = [
+                    Player(
+                        name=e["playerPoolEntry"]["player"]["fullName"],
+                        slot=e["lineupSlotId"],
+                        points=e["playerPoolEntry"]["appliedStatTotal"],
+                        eligible=frozenset(e["playerPoolEntry"]["player"]["eligibleSlots"]),
+                    )
+                    for e in team["rosterForCurrentScoringPeriod"]["entries"]
+                ]
+                team_weeks.append(TeamWeek(week, team["teamId"], players))
+
+    matchups = []
+    for m in responses[-1].get("schedule", []) if responses else []:
+        home, away = m.get("home"), m.get("away")
+        if not home or not away or m.get("winner") not in ("HOME", "AWAY"):
+            continue
+        played = [int(w) for w in home.get("pointsByScoringPeriod", {})]
+        if not played or max(played) > season.last_completed_week:
+            continue
+        winner, loser = (home, away) if m["winner"] == "HOME" else (away, home)
+        matchups.append(Matchup(sorted(played), winner["teamId"], loser["teamId"], winner["totalPoints"]))
+
+    return Lineups(season.year, slot_counts, team_weeks, matchups, datetime.now(timezone.utc))
+
+
+def get_lineups(seasons: list[Season]) -> tuple[list[Lineups], bool]:
+    """Lineups for the given seasons (fetching any not cached yet), and whether ESPN failed."""
+    espn_error = False
+    try:
+        for season in seasons:
+            cached = _lineup_cache.get(season.year)
+            stale = (
+                season.in_progress
+                and cached is not None
+                and datetime.now(timezone.utc) - cached.fetched_at > CURRENT_SEASON_MAX_AGE
+            )
+            if cached is None or stale:
+                _lineup_cache[season.year] = fetch_lineups(season)
+    except Exception as exc:
+        log.warning("ESPN lineup fetch failed: %s", type(exc).__name__)
+        espn_error = True
+    return [_lineup_cache[s.year] for s in seasons if s.year in _lineup_cache], espn_error
 
 
 def select_seasons(seasons: list[Season], choice: str | None) -> tuple[list[str], str, list[Season]]:

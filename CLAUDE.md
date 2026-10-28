@@ -82,11 +82,13 @@ uv run deploy/deploy.py                                # build, push, roll out (
 
 ## Where things are
 
-- `src/belt/espn.py`: ESPN reads, the in-memory season cache, and `select_seasons()` for the
-  season dropdown (markup in `templates/_season_picker.html`), shared by all tabs.
+- `src/belt/espn.py`: ESPN reads, the in-memory season cache, `select_seasons()` for the
+  season dropdown (markup in `templates/_season_picker.html`), and per-week lineups
+  (`get_lineups()`, about 1 request per week, fetched 8 at a time), shared by all tabs.
 - `src/belt/records.py`: the Records tab (aggregation + blueprint). It keeps no database;
   Postgres arrives with the bet tracker.
 - `src/belt/transactions.py`: the Transactions tab (pickups, drops, trades, lineup and IR
   moves from ESPN's per-team season totals).
+- `src/belt/bench.py`: the Bench tab (best lineup in hindsight, lineup losses, worst week).
 - `specs/NNN-*/`: each feature's spec, plan, and tasks.
 - Infrastructure: `~/code/basso-infra/basso-root/us-west-2/for-the-belt/`.

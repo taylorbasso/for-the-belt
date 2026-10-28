@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block title %}Bench{% endblock %}
+
+{% macro swap_text(w) -%}
+  started {{ w.swap[1].name }} ({{ '%.1f' % w.swap[1].points }}) over {{ w.swap[0].name }} ({{ '%.1f' % w.swap[0].points }})
+{%- endmacro %}
+
+{% block content %}
+{% if espn_error %}
+  {% if rows %}
+    <p class="notice">Couldn't reach ESPN. Showing numbers as of {{ updated.strftime('%b %-d, %-I:%M %p') }}.</p>
+  {% else %}
+    <p class="notice">Couldn't reach ESPN. Try again later.</p>
+  {% endif %}
+{% endif %}
+
+{% if rows %}
+{% include "_season_picker.html" %}
+
+<h2 class="page-title">Who can't set a lineup?</h2>
+<p class="intro">
+  Each week, your lineup vs. the best one you could have started from your own roster (in
+  hindsight). The gap is points you left on the bench.
+</p>
+
+{% if shame %}
+{% set w = shame.worst %}
+<div class="callout">
+  <div class="callout-label">🤡 Worst lineup {{ 'ever' if selected == 'all' else 'of ' ~ selected }}</div>
+  <p>
+    <strong>{{ shame.name }}</strong>, week {{ w.week }}{% if selected == 'all' %} of {{ w.year }}{% endif %}:
+    {% if w.swap %}{{ swap_text(w) }}{% else %}set a bad lineup{% endif %},
+    leaving <strong>{{ '%.1f' % w.left }} points</strong> on the bench.
+  </p>
+</div>
+{% endif %}
+
+<table class="records">
+  <thead>
+    <tr>
+      <th class="name">Manager</th>
+      <th>Points left<br>/ week</th>
+      <th>Games<br>blown</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="name">
+        {{ r.name }}
+        {% if r.worst %}
+        <div class="sub">
+          Worst: wk {{ r.worst.week }}{% if selected == 'all' %} '{{ '%02d' % (r.worst.year % 100) }}{% endif %}
+          (−{{ '%.1f' % r.worst.left }}){% if r.worst.swap %}, {{ swap_text(r.worst) }}{% endif %}
+        </div>
+        {% endif %}
+      </td>
+      <td class="big">{{ '%.1f' % r.bench_per_week }}</td>
+      <td class="big">{{ r.lineup_losses }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="footnote">
+  Games blown = losses the best lineup would have won. Every completed week counts, playoffs
+  included. Worst first.
+  {% if in_progress %}{{ current.year }} season in progress.{% endif %}
+  Updated {{ updated.strftime('%b %-d, %-I:%M %p') }}.
+</p>
+{% endif %}
+{% endblock %}

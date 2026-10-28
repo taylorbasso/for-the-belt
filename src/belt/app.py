@@ -11,11 +11,13 @@ def create_app() -> Flask:
     app.config["TEMPLATES_AUTO_RELOAD"] = True
     logging.basicConfig(level=logging.INFO)
 
+    from belt.bench import bp as bench_bp
     from belt.records import bp as records_bp
     from belt.transactions import bp as transactions_bp
 
     app.register_blueprint(records_bp)
     app.register_blueprint(transactions_bp)
+    app.register_blueprint(bench_bp)
 
     @app.route("/")
     def home() -> ResponseReturnValue:
