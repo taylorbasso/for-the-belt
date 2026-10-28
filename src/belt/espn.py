@@ -32,6 +32,11 @@ class ManagerSeason:
     points_against: float
     final_rank: int  # 0 while the season is in progress
     shotguns: int  # completed weeks with the league's lowest score, playoffs included
+    pickups: int  # players added from waivers or free agency; the rest are ESPN's season totals
+    drops: int
+    trades: int  # counted once for each team in the trade
+    lineup_moves: int  # players moved into the starting lineup
+    ir_moves: int
 
 
 @dataclass(frozen=True)
@@ -100,6 +105,7 @@ def fetch_season(year: int) -> Season:
         else:
             member_id = name = team.get("name", f"Team {team['id']}")
         record = team["record"]["overall"]
+        moves = team.get("transactionCounter", {})
         managers.append(
             ManagerSeason(
                 year=year,
@@ -112,6 +118,11 @@ def fetch_season(year: int) -> Season:
                 points_against=record["pointsAgainst"],
                 final_rank=team.get("rankCalculatedFinal") or 0,
                 shotguns=shotguns.get(team["id"], 0),
+                pickups=moves.get("acquisitions", 0),
+                drops=moves.get("drops", 0),
+                trades=moves.get("trades", 0),
+                lineup_moves=moves.get("moveToActive", 0),
+                ir_moves=moves.get("moveToIR", 0),
             )
         )
 
@@ -122,6 +133,15 @@ def fetch_season(year: int) -> Season:
         previous_seasons=list(status.get("previousSeasons", [])),
         fetched_at=datetime.now(timezone.utc),
     )
+
+
+def select_seasons(seasons: list[Season], choice: str | None) -> tuple[list[str], str, list[Season]]:
+    """The season dropdown: (years newest first, selected year or "all", seasons to show)."""
+    years = [str(s.year) for s in reversed(seasons)]
+    # ?season=<year> or ?season=all; anything else shows the current season.
+    selected = choice if choice == "all" or choice in years else (years[0] if years else "all")
+    shown = seasons if selected == "all" else [s for s in seasons if str(s.year) == selected]
+    return years, selected, shown
 
 
 def get_seasons() -> tuple[list[Season], bool]:

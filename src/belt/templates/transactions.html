@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Transactions{% endblock %}
+{% block content %}
+{% if espn_error %}
+  {% if rows %}
+    <p class="notice">Couldn't reach ESPN. Showing counts as of {{ updated.strftime('%b %-d, %-I:%M %p') }}.</p>
+  {% else %}
+    <p class="notice">Couldn't reach ESPN. Try again later.</p>
+  {% endif %}
+{% endif %}
+
+{% if rows %}
+{% include "_season_picker.html" %}
+
+<table class="records">
+  <thead>
+    <tr>
+      <th class="name">Manager</th>
+      <th>Pickups</th>
+      <th>Drops</th>
+      <th>Trades</th>
+      <th>Lineup</th>
+      <th title="Players moved to injured reserve">IR</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="name">{{ r.name }}</td>
+      <td>{{ r.pickups }}</td>
+      <td>{{ r.drops }}</td>
+      <td>{{ r.trades }}</td>
+      <td>{{ r.lineup_moves }}</td>
+      <td>{{ r.ir_moves }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="footnote">
+  Pickups include waiver claims and free agents. A trade counts once for each manager in it.
+  Lineup = players moved into the starting lineup. IR = players moved to injured reserve.
+  {% if in_progress %}{{ current.year }} season in progress.{% endif %}
+  Updated {{ updated.strftime('%b %-d, %-I:%M %p') }}.
+</p>
+{% endif %}
+{% endblock %}

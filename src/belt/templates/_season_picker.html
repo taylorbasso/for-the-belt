@@ -1,0 +1,8 @@
+<form class="season-picker" method="get">
+  <label for="season">Season</label>
+  <select id="season" name="season" onchange="this.form.submit()">
+    {% for y in years %}<option value="{{ y }}" {{ 'selected' if y == selected }}>{{ y }}</option>{% endfor %}
+    <option value="all" {{ 'selected' if selected == 'all' }}>All time</option>
+  </select>
+  <noscript><button>Show</button></noscript>
+</form>

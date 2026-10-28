@@ -57,12 +57,7 @@ def all_time_records(seasons: list[Season]) -> list[AllTimeRecord]:
 def index() -> str:
     seasons, espn_error = espn.get_seasons()
     current = seasons[-1] if seasons else None
-    years = [str(s.year) for s in reversed(seasons)]  # newest first
-    # ?season=<year> or ?season=all; anything else shows the current season.
-    selected = request.args.get("season")
-    if selected != "all" and selected not in years:
-        selected = years[0] if years else "all"
-    shown = seasons if selected == "all" else [s for s in seasons if str(s.year) == selected]
+    years, selected, shown = espn.select_seasons(seasons, request.args.get("season"))
     return render_template(
         "records.html",
         rows=all_time_records(shown),

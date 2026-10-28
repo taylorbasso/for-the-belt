@@ -12,8 +12,10 @@ def create_app() -> Flask:
     logging.basicConfig(level=logging.INFO)
 
     from belt.records import bp as records_bp
+    from belt.transactions import bp as transactions_bp
 
     app.register_blueprint(records_bp)
+    app.register_blueprint(transactions_bp)
 
     @app.route("/")
     def home() -> ResponseReturnValue:
