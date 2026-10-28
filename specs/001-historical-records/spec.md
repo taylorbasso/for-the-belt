@@ -71,6 +71,9 @@ standings for every season, added up by hand.
 - **FR-012**: The tab MUST show each manager's total shotguns: the number of completed NFL weeks,
   across every season and including playoff weeks, where they had the league's lowest score.
   Everyone tied for lowest gets one. (Added 2026-10-27.)
+- **FR-013**: A season picker MUST let members choose a single season or "All time". It MUST
+  default to the current season. A single season shows the same columns minus seasons played,
+  ranked the same way. (Added 2026-10-27.)
 
 ### Key Entities
 
@@ -97,8 +100,7 @@ standings for every season, added up by hand.
   onward). If the league existed earlier under a different ID, those seasons are out of scope.
 - Only the regular season counts toward W-L-T and points. Shotguns (FR-012) are the exception:
   they count every completed week, playoffs included, back to 2022, even before the shotgun
-  rule existed. Playoff records, head-to-head records,
-  and per-season breakdowns are out of scope.
+  rule existed. Playoff records and head-to-head records are out of scope.
 - Manager names come from their ESPN profile names.
 - Records only need to be as fresh as the most recently completed week.
 - The ranking is fixed; members can't re-sort the table.

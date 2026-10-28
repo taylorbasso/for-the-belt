@@ -10,11 +10,20 @@
 {% endif %}
 
 {% if rows %}
+<form class="season-picker" method="get">
+  <label for="season">Season</label>
+  <select id="season" name="season" onchange="this.form.submit()">
+    {% for y in years %}<option value="{{ y }}" {{ 'selected' if y == selected }}>{{ y }}</option>{% endfor %}
+    <option value="all" {{ 'selected' if selected == 'all' }}>All time</option>
+  </select>
+  <noscript><button>Show</button></noscript>
+</form>
+
 <table class="records">
   <thead>
     <tr>
       <th class="name">Manager</th>
-      <th>Yrs</th>
+      {% if selected == 'all' %}<th>Yrs</th>{% endif %}
       <th>W-L-T</th>
       <th>Win%</th>
       <th>PF</th>
@@ -27,7 +36,7 @@
     {% for r in rows %}
     <tr>
       <td class="name">{{ r.name }}</td>
-      <td>{{ r.seasons }}</td>
+      {% if selected == 'all' %}<td>{{ r.seasons }}</td>{% endif %}
       <td>{{ r.wins }}-{{ r.losses }}-{{ r.ties }}</td>
       <td>{{ ('%.3f' % r.win_pct).lstrip('0') }}</td>
       <td>{{ '%.0f' % r.points_for }}</td>
@@ -42,7 +51,7 @@
 <p class="footnote">
   Records are regular season only. 🍺 = shotguns: weeks with the league's lowest score,
   playoffs included.
-  {% if current.in_progress %}{{ current.year }} season in progress.{% endif %}
+  {% if in_progress %}{{ current.year }} season in progress.{% endif %}
   Updated {{ updated.strftime('%b %-d, %-I:%M %p') }}.
 </p>
 {% endif %}

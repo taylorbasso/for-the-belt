@@ -1,5 +1,7 @@
 from datetime import datetime, timezone
 
+from belt import espn
+from belt.app import create_app
 from belt.espn import ManagerSeason, Season, shotguns_by_team
 from belt.records import all_time_records
 
@@ -88,3 +90,20 @@ def test_shotguns_count_lowest_score_per_completed_week():
 def test_shotguns_include_teams_without_an_opponent():
     schedule = [{"home": side(1, {1: 50.0})}, {"home": side(2, {1: 90.0}), "away": side(3, {1: 80.0})}]
     assert shotguns_by_team(schedule, latest_scoring_period=2) == {1: 1}
+
+
+def test_season_picker_defaults_to_current_season(monkeypatch):
+    seasons = [
+        season(2025, manager(2025, "a", "A", 9, 5, rank=1)),
+        season(2026, manager(2026, "a", "A", 3, 4)),
+    ]
+    monkeypatch.setattr(espn, "get_seasons", lambda: (seasons, False))
+    client = create_app().test_client()
+
+    def page(query=""):
+        return client.get("/records" + query).get_data(as_text=True)
+
+    assert "3-4-0" in page()  # current season by default
+    assert "9-5-0" in page("?season=2025")
+    assert "12-9-0" in page("?season=all")
+    assert "3-4-0" in page("?season=1999")  # unknown year falls back to current

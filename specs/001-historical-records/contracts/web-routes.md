@@ -7,9 +7,13 @@ All routes are public: no login (FR-011), no forms, no sessions.
 Redirects (302) to `/records`. It's the only tab for now; once the bet tracker exists, this
 will point at whichever tab the league uses most.
 
-## `GET /records`
+## `GET /records[?season=<year>|all]`
 
-Renders the Historical Records tab inside the shared layout. The layout has a tab bar
+Renders the Historical Records tab inside the shared layout. A "Season" dropdown above the
+table (FR-013) lists every season, newest first, then "All time"; changing it reloads the page
+with `?season=`. With no `season`, or one ESPN doesn't have, the page shows the current season.
+A single season hides the Yrs column, and its in-progress note only appears for the current
+season. The layout has a tab bar
 (one tab for now) and the app's title, "For the Belt".
 
 **Table**: one row per manager, in the FR-007 order.
