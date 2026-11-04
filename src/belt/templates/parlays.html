@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block title %}Parlays{% endblock %}
+
+{% macro pct(x) -%}{{ '–' if x is none else '%d%%' % (x * 100 + 0.5) }}{%- endmacro %}
+{% macro money(x) -%}${{ '{:,.2f}'.format(x) }}{%- endmacro %}
+{% macro odds(x) -%}{% if x is not none %}{{ '+%d' % x if x > 0 else '−%d' % -x }}{% endif %}{%- endmacro %}
+
+{% block content %}
+<h2 class="page-title">Who keeps busting the parlay?</h2>
+<p class="intro">
+  Each week the lowest scorer shotguns, puts $10 on a parlay and picks the category. Everyone
+  picks one leg.
+</p>
+
+{% if not weeks %}
+<p>No parlays recorded yet.</p>
+{% else %}
+<p><strong>{{ hits }} of {{ settled }}</strong> parlays hit{% if paid %}, paying {{ money(paid) }}{% endif %}.</p>
+
+<table class="records">
+  <thead>
+    <tr>
+      <th class="name">Member</th>
+      <th>Record</th>
+      <th>Hit %</th>
+      <th>Odds<br>said</th>
+      <th>Killed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in stats %}
+    <tr>
+      <td class="name">{{ r.name }}</td>
+      <td>{{ r.wins }}-{{ r.losses }}</td>
+      <td>{{ pct(r.hit_rate) }}</td>
+      <td>{{ pct(r.expected_rate) }}</td>
+      <td class="big">{{ r.kills }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="footnote">
+  Odds said = how often the odds expected their legs to hit. Killed = parlays where theirs was
+  the only losing leg. Worst first.
+</p>
+
+{% for p, res, killer in weeks %}
+<section class="week">
+  <h3>
+    Week {{ p.week }}{% if many_seasons %}, {{ p.season }}{% endif %}
+    <span class="result {{ res }}">
+      {%- if res == 'hit' %}Hit{% if p.payout %} · paid {{ money(p.payout) }}{% endif %}
+      {%- elif res == 'busted' %}Busted{% else %}Pending{% endif -%}
+    </span>
+  </h3>
+  <p class="category"><strong>{{ p.lsp }}</strong>'s category: {{ p.category }}</p>
+  <table class="records">
+    <tbody>
+      {% for leg in p.legs %}
+      <tr>
+        <td class="name">
+          {{ leg.member }}{% if leg.member == killer %} <span class="killer">killed it</span>{% endif %}
+          <div class="sub">{{ leg.pick }}</div>
+        </td>
+        <td>{{ odds(leg.odds) }}</td>
+        <td>{% if leg.result == 'W' %}✅{% elif leg.result == 'L' %}❌{% else %}<span class="sub">pending</span>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endfor %}
+{% endif %}
+{% endblock %}

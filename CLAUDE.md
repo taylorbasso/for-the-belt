@@ -87,10 +87,28 @@ uv run deploy/deploy.py                                # build, push, roll out (
 - `src/belt/espn.py`: ESPN reads, the in-memory season cache, `select_seasons()` for the
   season dropdown (markup in `templates/_season_picker.html`), and per-week lineups
   (`get_lineups()`, about 1 request per week, fetched 8 at a time), shared by all tabs.
-- `src/belt/records.py`: the Records tab (aggregation + blueprint). It keeps no database;
-  Postgres arrives with the bet tracker.
+- `src/belt/records.py`: the Records tab (aggregation + blueprint). The app has no database
+  yet; Postgres arrives with an admin login, if one gets built.
 - `src/belt/transactions.py`: the Transactions tab (pickups, drops, trades, lineup and IR
   moves from ESPN's per-team season totals).
 - `src/belt/bench.py`: the Bench tab (best lineup in hindsight, lineup losses, worst week).
+- `src/belt/parlays.py`: the Parlays tab (weekly loser parlay: leg records, parlay kills). Reads
+  only `src/belt/data/parlays.json`, never ESPN.
 - `specs/NNN-*/`: each feature's spec, plan, and tasks.
 - Infrastructure: `~/code/basso-infra/basso-root/us-west-2/for-the-belt/`.
+
+## Recording a parlay
+
+Each week the lowest scorer (LSP) puts $10 on a parlay in a category they pick, and all eight
+members, the LSP included, add one leg. The LM records it by asking Claude in a session.
+
+- Add or edit the week in `src/belt/data/parlays.json` (shape in
+  `specs/004-parlay-tracker/data-model.md`). Don't touch other weeks.
+- `week` is the NFL week of the games bet on: the week after the LSP's loss.
+- Use member names exactly as the other tabs show them: Taylor Basso, Jasper Bowser,
+  Tate hathaway, Anthony Naranjo, Colton Dyches, Derek Parry, Dustin Vicchrilli,
+  Cody Buckingham. A misspelled name splits that member's stats.
+- `pick` is the leg as written on the slip. `odds` is American odds as an integer (`-150`,
+  `240`), or null if unknown.
+- `result` is `"W"`, `"L"`, or null until graded. `payout` is the dollars paid, only if it hit.
+- Then run `./scripts/check.sh`, commit, and deploy with `uv run deploy/deploy.py` (ask first).

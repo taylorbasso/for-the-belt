@@ -7,6 +7,7 @@
   --accent: #0b5d3b;
   --notice-bg: #fff4d6;
   --gold: #9a7209;
+  --bad: #c0392b;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,6 +20,7 @@
     --accent: #5cc796;
     --notice-bg: #3a3112;
     --gold: #e0b84a;
+    --bad: #ff6b5e;
   }
 }
 
@@ -180,6 +182,33 @@ table.records tbody tr:nth-child(even) {
 .footnote {
   color: var(--muted);
   font-size: 0.8rem;
+}
+
+/* Parlays tab: one block per week. */
+.week { margin-top: 24px; }
+
+.week h3 {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 2px;
+  font-size: 1rem;
+}
+
+.week .result { font-size: 0.85rem; font-weight: 600; }
+.week .result.hit { color: var(--accent); }
+.week .result.busted { color: var(--bad); }
+.week .result.pending { color: var(--muted); }
+
+.week .category {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.week .killer {
+  color: var(--bad);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 /* Wider screens have room for full-size text. */

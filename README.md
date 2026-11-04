@@ -6,6 +6,10 @@ ESPN app. Live at https://fantasy.taylorbasso.dev.
 **Tabs**
 - **Records**: all-time regular-season record, win %, points, and titles for every manager
   since 2022.
+- **Transactions**: pickups, drops, trades, lineup and IR moves per manager.
+- **Bench**: points left on the bench and games lost to bad lineups.
+- **Parlays**: the weekly loser parlay: each member's leg record and how many parlays they
+  killed. Recorded by hand in `src/belt/data/parlays.json`.
 
 ## Run locally
 
