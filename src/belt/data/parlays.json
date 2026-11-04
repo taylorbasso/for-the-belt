@@ -1,3 +1,38 @@
 {
-  "parlays": []
+  "parlays": [
+    {
+      "season": 2026,
+      "week": 7,
+      "lsp": "Tate hathaway",
+      "category": "Anytime TD",
+      "payout": null,
+      "legs": [
+        {"member": "Derek Parry", "pick": "Darren Waller anytime TD", "odds": null, "result": "W"},
+        {"member": "Anthony Naranjo", "pick": "George Kittle anytime TD", "odds": null, "result": "L"},
+        {"member": "Tate hathaway", "pick": "Sam LaPorta anytime TD", "odds": null, "result": "L"},
+        {"member": "Taylor Basso", "pick": "Trey McBride anytime TD", "odds": null, "result": "W"},
+        {"member": "Dustin Vicchrilli", "pick": "Colby Parkinson anytime TD", "odds": null, "result": "L"},
+        {"member": "Jasper Bowser", "pick": "Brock Bowers anytime TD", "odds": null, "result": "L"},
+        {"member": "Colton Dyches", "pick": "Isaiah Likely anytime TD", "odds": null, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Ja'Marr Chase anytime TD", "odds": null, "result": "W"}
+      ]
+    },
+    {
+      "season": 2026,
+      "week": 8,
+      "lsp": "Dustin Vicchrilli",
+      "category": "Anytime TD",
+      "payout": null,
+      "legs": [
+        {"member": "Derek Parry", "pick": "Josh Allen anytime TD", "odds": null, "result": "W"},
+        {"member": "Tate hathaway", "pick": "Parker Washington anytime TD", "odds": null, "result": "L"},
+        {"member": "Anthony Naranjo", "pick": "Bucky Irving anytime TD", "odds": null, "result": "W"},
+        {"member": "Dustin Vicchrilli", "pick": "Kyren Williams anytime TD", "odds": null, "result": "W"},
+        {"member": "Colton Dyches", "pick": "Ashton Jeanty anytime TD", "odds": null, "result": "L"},
+        {"member": "Taylor Basso", "pick": "D'Andre Swift anytime TD", "odds": null, "result": "W"},
+        {"member": "Cody Buckingham", "pick": "Bhayshul Tuten anytime TD", "odds": null, "result": "W"},
+        {"member": "Jasper Bowser", "pick": "Justin Jefferson anytime TD", "odds": null, "result": "W"}
+      ]
+    }
+  ]
 }

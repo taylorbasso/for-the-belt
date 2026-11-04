@@ -66,6 +66,18 @@ ones:
   come from `src/belt/data/past_seasons.json`, saved once while the LM's cookies still worked.
   Those seasons never change; don't regenerate the file.
 - League history in ESPN goes back to 2022 under the current league ID.
+- For grading parlay legs (real NFL games, not fantasy), ESPN's public NFL endpoints need no
+  login. `scripts/nfl_week.py` wraps them; use them directly for other bet types:
+  - `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=<season>&seasontype=2&week=<n>`:
+    the week's games (`events[].id`), scores and `winner` flags. With no params it's the
+    current week.
+  - `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<id>`: one game.
+    `boxscore.players[].statistics[]` has per-player stats by category (`rushing`,
+    `receiving`, `passing`, `kickReturns`, `puntReturns`, `interceptions`, `defensive`), with
+    `keys` naming each value in `athletes[].stats` (e.g. `rushingTouchdowns`,
+    `receivingYards`). `scoringPlays[].text` reads like "Josh Allen 1 Yd Rush".
+  - An anytime TD is any rushing, receiving, return or defensive TD. Passing TDs don't count.
+  - These are a dev tool for Claude sessions. The app itself doesn't call them.
 
 ## Commands
 
@@ -111,4 +123,9 @@ members, the LSP included, add one leg. The LM records it by asking Claude in a 
 - `pick` is the leg as written on the slip. `odds` is American odds as an integer (`-150`,
   `240`), or null if unknown.
 - `result` is `"W"`, `"L"`, or null until graded. `payout` is the dollars paid, only if it hit.
+- `lsp` is the lowest scorer of the previous fantasy week (from ESPN's `pointsByScoringPeriod`).
+- To grade, run `python3 scripts/nfl_week.py <season> <week>`: final scores (for ML legs) and
+  every anytime-TD scorer, from ESPN's public NFL endpoints. Before marking a TD leg L, check
+  the player shows up in that game's box score, so a name mismatch isn't graded as a loss.
+  Other bet types (yards, props) get graded by hand or by the LM.
 - Then run `./scripts/check.sh`, commit, and deploy with `uv run deploy/deploy.py` (ask first).
