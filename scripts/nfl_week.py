@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Print an NFL week's final scores and anytime-TD scorers, for grading parlay legs.
+"""Print an NFL week's final scores, closing moneylines and anytime-TD scorers.
+
+For grading parlay legs.
 
     python3 scripts/nfl_week.py 2026 8
 
@@ -40,11 +42,18 @@ def main(season: int, week: int) -> None:
         comp = event["competitions"][0]
         status = event["status"]["type"]
         sides = sorted(comp["competitors"], key=lambda c: c["homeAway"] != "away")
-        line = " at ".join(f"{c['team']['abbreviation']} {c.get('score', '')}" for c in sides)
-        winner = next((c["team"]["abbreviation"] for c in sides if c.get("winner")), None)
-        print(f"  {line}  ->  {winner + ' won' if winner else status['description']}")
-
         summary = get(f"{BASE}/summary?event={event['id']}")
+        # DraftKings' closing moneylines, when ESPN has them.
+        lines = (summary.get("pickcenter") or [{}])[0]
+        ml = {side: lines.get(f"{side}TeamOdds", {}).get("moneyLine") for side in ("home", "away")}
+
+        def team(c: dict) -> str:
+            odds = ml[c["homeAway"]]
+            return f"{c['team']['abbreviation']} {c.get('score', '')}" + (f" ({odds:+d})" if odds else "")
+
+        winner = next((c["team"]["abbreviation"] for c in sides if c.get("winner")), None)
+        print(f"  {' at '.join(team(c) for c in sides)}  ->  {winner + ' won' if winner else status['description']}")
+
         for team in summary.get("boxscore", {}).get("players", []):
             abbr = team["team"]["abbreviation"]
             for cat in team["statistics"]:

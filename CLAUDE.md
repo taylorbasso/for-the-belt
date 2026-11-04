@@ -77,6 +77,8 @@ ones:
     `keys` naming each value in `athletes[].stats` (e.g. `rushingTouchdowns`,
     `receivingYards`). `scoringPlays[].text` reads like "Josh Allen 1 Yd Rush".
   - An anytime TD is any rushing, receiving, return or defensive TD. Passing TDs don't count.
+  - `summary` also has `pickcenter[0]` (DraftKings): `homeTeamOdds.moneyLine`,
+    `awayTeamOdds.moneyLine`, `spread` and `overUnder`, kept after the game.
   - These are a dev tool for Claude sessions. The app itself doesn't call them.
 
 ## Commands
@@ -124,8 +126,11 @@ members, the LSP included, add one leg. The LM records it by asking Claude in a 
   `240`), or null if unknown.
 - `result` is `"W"`, `"L"`, or null until graded. `payout` is the dollars paid, only if it hit.
 - `lsp` is the lowest scorer of the previous fantasy week (from ESPN's `pointsByScoringPeriod`).
-- To grade, run `python3 scripts/nfl_week.py <season> <week>`: final scores (for ML legs) and
-  every anytime-TD scorer, from ESPN's public NFL endpoints. Before marking a TD leg L, check
-  the player shows up in that game's box score, so a name mismatch isn't graded as a loss.
-  Other bet types (yards, props) get graded by hand or by the LM.
+- To grade, run `python3 scripts/nfl_week.py <season> <week>`: final scores with DraftKings'
+  closing moneylines (use those as `odds` for ML legs) and every anytime-TD scorer, from
+  ESPN's public NFL endpoints. Before marking a TD leg L, check the player shows up in that
+  game's box score, so a name mismatch isn't graded as a loss. Spreads: grade from the final
+  score and put the spread in `pick`, not `odds`. Other bet types get graded by hand.
+- ESPN has no prices for anytime-TD props (the propBets entries are empty), so TD-leg odds only
+  come from the bet slip. Don't go looking again.
 - Then run `./scripts/check.sh`, commit, and deploy with `uv run deploy/deploy.py` (ask first).

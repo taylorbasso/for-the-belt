@@ -36,6 +36,23 @@
     },
     {
       "season": 2026,
+      "week": 4,
+      "lsp": "Colton Dyches",
+      "category": "NFL ML",
+      "payout": null,
+      "legs": [
+        {"member": "Dustin Vicchrilli", "pick": "Ravens ML", "odds": -800, "result": "W"},
+        {"member": "Colton Dyches", "pick": "Chiefs ML", "odds": -205, "result": "W"},
+        {"member": "Anthony Naranjo", "pick": "Rams ML", "odds": -198, "result": "W"},
+        {"member": "Derek Parry", "pick": "Cowboys ML", "odds": 130, "result": "W"},
+        {"member": "Tate hathaway", "pick": "Colts ML", "odds": -225, "result": "W"},
+        {"member": "Jasper Bowser", "pick": "Lions ML", "odds": -192, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Saints ML", "odds": -115, "result": "L"},
+        {"member": "Taylor Basso", "pick": "Bills ML", "odds": -345, "result": "L"}
+      ]
+    },
+    {
+      "season": 2026,
       "week": 6,
       "lsp": "Dustin Vicchrilli",
       "category": "Anytime TD",
