@@ -19,6 +19,23 @@
     },
     {
       "season": 2026,
+      "week": 3,
+      "lsp": "Dustin Vicchrilli",
+      "category": "Anytime TD",
+      "payout": null,
+      "legs": [
+        {"member": "Jasper Bowser", "pick": "Drake London anytime TD", "odds": null, "result": "L"},
+        {"member": "Anthony Naranjo", "pick": "Christian Watson anytime TD", "odds": null, "result": "W"},
+        {"member": "Derek Parry", "pick": "Tee Higgins anytime TD", "odds": null, "result": "W"},
+        {"member": "Colton Dyches", "pick": "TreVeyon Henderson anytime TD", "odds": null, "result": "L"},
+        {"member": "Dustin Vicchrilli", "pick": "Chris Olave anytime TD", "odds": null, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Amon-Ra St. Brown anytime TD", "odds": null, "result": "W"},
+        {"member": "Tate hathaway", "pick": "Tucker Kraft anytime TD", "odds": null, "result": "L"},
+        {"member": "Taylor Basso", "pick": "Christian McCaffrey anytime TD", "odds": null, "result": "W"}
+      ]
+    },
+    {
+      "season": 2026,
       "week": 6,
       "lsp": "Dustin Vicchrilli",
       "category": "Anytime TD",
