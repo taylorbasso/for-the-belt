@@ -2,6 +2,23 @@
   "parlays": [
     {
       "season": 2026,
+      "week": 2,
+      "lsp": "Jasper Bowser",
+      "category": "NFL spreads",
+      "payout": null,
+      "legs": [
+        {"member": "Jasper Bowser", "pick": "Bears -4.5", "odds": null, "result": "L"},
+        {"member": "Anthony Naranjo", "pick": "Seahawks -3.5", "odds": null, "result": "W"},
+        {"member": "Colton Dyches", "pick": "Chiefs -6.5", "odds": null, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Buccaneers -8.5", "odds": null, "result": "L"},
+        {"member": "Derek Parry", "pick": "Steelers +5.5", "odds": null, "result": "L"},
+        {"member": "Taylor Basso", "pick": "Chargers -6.5", "odds": null, "result": "L"},
+        {"member": "Dustin Vicchrilli", "pick": "Bills -4.5", "odds": null, "result": "W"},
+        {"member": "Tate hathaway", "pick": "Texans -3", "odds": null, "result": "L"}
+      ]
+    },
+    {
+      "season": 2026,
       "week": 6,
       "lsp": "Dustin Vicchrilli",
       "category": "Anytime TD",
