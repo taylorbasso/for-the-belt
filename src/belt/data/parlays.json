@@ -2,6 +2,23 @@
   "parlays": [
     {
       "season": 2026,
+      "week": 6,
+      "lsp": "Dustin Vicchrilli",
+      "category": "Anytime TD",
+      "payout": null,
+      "legs": [
+        {"member": "Anthony Naranjo", "pick": "Dalton Kincaid anytime TD", "odds": null, "result": "L"},
+        {"member": "Dustin Vicchrilli", "pick": "Chuba Hubbard anytime TD", "odds": null, "result": "W"},
+        {"member": "Taylor Basso", "pick": "Kenneth Walker III anytime TD", "odds": null, "result": "W"},
+        {"member": "Derek Parry", "pick": "Bijan Robinson anytime TD", "odds": null, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Ashton Jeanty anytime TD", "odds": null, "result": "W"},
+        {"member": "Tate hathaway", "pick": "Rome Odunze anytime TD", "odds": null, "result": "L"},
+        {"member": "Jasper Bowser", "pick": "Emanuel Wilson anytime TD", "odds": null, "result": "L"},
+        {"member": "Colton Dyches", "pick": "Christian McCaffrey anytime TD", "odds": null, "result": "W"}
+      ]
+    },
+    {
+      "season": 2026,
       "week": 7,
       "lsp": "Tate hathaway",
       "category": "Anytime TD",
