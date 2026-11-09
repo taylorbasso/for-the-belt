@@ -53,6 +53,23 @@
     },
     {
       "season": 2026,
+      "week": 5,
+      "lsp": "Cody Buckingham",
+      "category": "Anything goes (NFL or college)",
+      "payout": null,
+      "legs": [
+        {"member": "Derek Parry", "pick": "Davante Adams anytime TD", "odds": null, "result": "W"},
+        {"member": "Taylor Basso", "pick": "Trey McBride anytime TD", "odds": null, "result": "W"},
+        {"member": "Tate hathaway", "pick": "Penn State", "odds": null, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Utah -15.5", "odds": null, "result": "W"},
+        {"member": "Dustin Vicchrilli", "pick": "James Cook anytime TD", "odds": null, "result": "W"},
+        {"member": "Jasper Bowser", "pick": "Quinshon Judkins anytime TD", "odds": null, "result": "L"},
+        {"member": "Anthony Naranjo", "pick": "George Pickens anytime TD", "odds": null, "result": "W"},
+        {"member": "Colton Dyches", "pick": "Josh Allen anytime TD", "odds": null, "result": "W"}
+      ]
+    },
+    {
+      "season": 2026,
       "week": 6,
       "lsp": "Dustin Vicchrilli",
       "category": "Anytime TD",
