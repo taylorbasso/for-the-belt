@@ -118,6 +118,23 @@
         {"member": "Cody Buckingham", "pick": "Bhayshul Tuten anytime TD", "odds": null, "result": "W"},
         {"member": "Jasper Bowser", "pick": "Justin Jefferson anytime TD", "odds": null, "result": "W"}
       ]
+    },
+    {
+      "season": 2026,
+      "week": 9,
+      "lsp": "Dustin Vicchrilli",
+      "category": "Anytime TD",
+      "payout": null,
+      "legs": [
+        {"member": "Anthony Naranjo", "pick": "George Kittle anytime TD", "odds": null, "result": "L"},
+        {"member": "Dustin Vicchrilli", "pick": "Williams anytime TD", "odds": null, "result": null},
+        {"member": "Tate hathaway", "pick": "Nico Collins anytime TD", "odds": null, "result": "W"},
+        {"member": "Derek Parry", "pick": "George Pickens anytime TD", "odds": null, "result": null},
+        {"member": "Colton Dyches", "pick": "Kenneth Walker III anytime TD", "odds": null, "result": "W"},
+        {"member": "Jasper Bowser", "pick": "Jaxon Smith-Njigba anytime TD", "odds": null, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Ollie Gordon II anytime TD", "odds": null, "result": "L"},
+        {"member": "Taylor Basso", "pick": "D'Andre Swift anytime TD", "odds": null, "result": null}
+      ]
     }
   ]
 }
