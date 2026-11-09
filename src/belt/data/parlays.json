@@ -127,7 +127,7 @@
       "payout": null,
       "legs": [
         {"member": "Anthony Naranjo", "pick": "George Kittle anytime TD", "odds": null, "result": "L"},
-        {"member": "Dustin Vicchrilli", "pick": "Williams anytime TD", "odds": null, "result": null},
+        {"member": "Dustin Vicchrilli", "pick": "Javonte Williams anytime TD", "odds": null, "result": "W"},
         {"member": "Tate hathaway", "pick": "Nico Collins anytime TD", "odds": null, "result": "W"},
         {"member": "Derek Parry", "pick": "George Pickens anytime TD", "odds": null, "result": null},
         {"member": "Colton Dyches", "pick": "Kenneth Walker III anytime TD", "odds": null, "result": "W"},
