@@ -125,6 +125,8 @@ members, the LSP included, add one leg. The LM records it by asking Claude in a 
 - `pick` is the leg as written on the slip. `odds` is American odds as an integer (`-150`,
   `240`), or null if unknown.
 - `result` is `"W"`, `"L"`, or null until graded. `payout` is the dollars paid, only if it hit.
+- A voided leg (the player didn't play) doesn't count: remove it from the week, so that
+  member has no leg that week.
 - `lsp` is the lowest scorer of the previous fantasy week (from ESPN's `pointsByScoringPeriod`).
 - To grade, run `python3 scripts/nfl_week.py <season> <week>`: final scores with DraftKings'
   closing moneylines (use those as `odds` for ML legs) and every anytime-TD scorer, from
