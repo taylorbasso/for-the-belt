@@ -132,7 +132,23 @@
         {"member": "Colton Dyches", "pick": "Kenneth Walker III anytime TD", "odds": null, "result": "W"},
         {"member": "Jasper Bowser", "pick": "Jaxon Smith-Njigba anytime TD", "odds": null, "result": "L"},
         {"member": "Cody Buckingham", "pick": "Ollie Gordon II anytime TD", "odds": null, "result": "L"},
-        {"member": "Taylor Basso", "pick": "D'Andre Swift anytime TD", "odds": null, "result": null}
+        {"member": "Taylor Basso", "pick": "D'Andre Swift anytime TD", "odds": null, "result": "L"}
+      ]
+    },
+    {
+      "season": 2026,
+      "week": 10,
+      "lsp": "Cody Buckingham",
+      "category": "Anytime TD",
+      "payout": null,
+      "legs": [
+        {"member": "Cody Buckingham", "pick": "Derrick Henry anytime TD", "odds": null, "result": null},
+        {"member": "Derek Parry", "pick": "Amon-Ra St. Brown anytime TD", "odds": null, "result": "W"},
+        {"member": "Anthony Naranjo", "pick": "Jaxon Smith-Njigba anytime TD", "odds": null, "result": "W"},
+        {"member": "Dustin Vicchrilli", "pick": "Jahmyr Gibbs anytime TD", "odds": null, "result": "W"},
+        {"member": "Tate hathaway", "pick": "Blake Corum anytime TD", "odds": null, "result": "W"},
+        {"member": "Colton Dyches", "pick": "Christian McCaffrey anytime TD", "odds": null, "result": "W"},
+        {"member": "Jasper Bowser", "pick": "James Cook anytime TD", "odds": null, "result": "W"}
       ]
     }
   ]
