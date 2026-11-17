@@ -142,7 +142,7 @@
       "category": "Anytime TD",
       "payout": null,
       "legs": [
-        {"member": "Cody Buckingham", "pick": "Derrick Henry anytime TD", "odds": null, "result": null},
+        {"member": "Cody Buckingham", "pick": "Derrick Henry anytime TD", "odds": null, "result": "W"},
         {"member": "Derek Parry", "pick": "Amon-Ra St. Brown anytime TD", "odds": null, "result": "W"},
         {"member": "Anthony Naranjo", "pick": "Jaxon Smith-Njigba anytime TD", "odds": null, "result": "W"},
         {"member": "Dustin Vicchrilli", "pick": "Jahmyr Gibbs anytime TD", "odds": null, "result": "W"},
