@@ -163,7 +163,7 @@
         {"member": "Taylor Basso", "pick": "Bears/Saints over 48.5", "odds": 104, "result": "L"},
         {"member": "Derek Parry", "pick": "Steelers/Eagles over 37.5", "odds": 100, "result": "L"},
         {"member": "Tate hathaway", "pick": "Raiders/Broncos under 40.5", "odds": 108, "result": "L"},
-        {"member": "Dustin Vicchrilli", "pick": "Bengals/Commanders over", "odds": null, "result": "L"},
+        {"member": "Dustin Vicchrilli", "pick": "Bengals/Commanders over 54.5", "odds": null, "result": "L"},
         {"member": "Cody Buckingham", "pick": "Jets/Chargers over 42.5", "odds": 100, "result": "W"},
         {"member": "Colton Dyches", "pick": "Buccaneers/Lions over 47.5", "odds": -104, "result": "W"}
       ]
