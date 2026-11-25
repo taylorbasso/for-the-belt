@@ -150,6 +150,23 @@
         {"member": "Colton Dyches", "pick": "Christian McCaffrey anytime TD", "odds": null, "result": "W"},
         {"member": "Jasper Bowser", "pick": "James Cook anytime TD", "odds": null, "result": "W"}
       ]
+    },
+    {
+      "season": 2026,
+      "week": 11,
+      "lsp": "Taylor Basso",
+      "category": "NFL over/unders",
+      "payout": null,
+      "legs": [
+        {"member": "Anthony Naranjo", "pick": "Vikings/49ers over", "odds": null, "result": "L"},
+        {"member": "Jasper Bowser", "pick": "Ravens/Panthers over", "odds": null, "result": "W"},
+        {"member": "Taylor Basso", "pick": "Bears/Saints over", "odds": null, "result": "L"},
+        {"member": "Derek Parry", "pick": "Steelers/Eagles over 35.5", "odds": null, "result": "L"},
+        {"member": "Tate hathaway", "pick": "Raiders/Broncos under", "odds": null, "result": "L"},
+        {"member": "Dustin Vicchrilli", "pick": "Bengals/Commanders over", "odds": null, "result": "L"},
+        {"member": "Cody Buckingham", "pick": "Jets/Chargers over", "odds": null, "result": "W"},
+        {"member": "Colton Dyches", "pick": "Titans/Cowboys under", "odds": null, "result": "L"}
+      ]
     }
   ]
 }
